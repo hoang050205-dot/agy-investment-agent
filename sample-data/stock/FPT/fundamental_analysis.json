@@ -1,0 +1,98 @@
+{
+  "symbol": "FPT",
+  "company_name": "Công ty Cổ phần FPT",
+  "evaluated_at": "2026-11-10T11:12:29.047275",
+  "summary": {
+    "capital_structure": "Lành mạnh",
+    "liquidity": "Tốt",
+    "capital_efficiency": "Xuất sắc",
+    "earnings_quality": "Cao",
+    "cash_flow": "Dồi dào",
+    "overall_health": "KHỎE MẠNH"
+  },
+  "warnings": {
+    "balance_sheet": [
+      {
+        "metric": "D/E (Nợ/VCSH)",
+        "value": "0.39",
+        "threshold": "< 1.0",
+        "status": "GREEN",
+        "message": "Cơ cấu vốn lành mạnh, nợ vay nằm trong ngưỡng an toàn."
+      },
+      {
+        "metric": "ROE",
+        "value": "26.14%",
+        "threshold": "> 15%",
+        "status": "GREEN_DARK",
+        "message": "Hiệu quả sử dụng vốn chủ sở hữu vượt trội (>15%)."
+      },
+      {
+        "metric": "Current Ratio",
+        "value": "1.65",
+        "threshold": ">= 1.0",
+        "status": "GREEN",
+        "message": "Khả năng thanh toán ngắn hạn dồi dào."
+      }
+    ],
+    "income_statement": [
+      {
+        "metric": "Biên lợi nhuận gộp",
+        "value": "32.93%",
+        "threshold": ">= 35%",
+        "status": "ORANGE",
+        "message": "Biên lãi gộp < 35%, cần lưu ý về sức mạnh định giá sản phẩm."
+      },
+      {
+        "metric": "Biên lợi nhuận hoạt động",
+        "value": "14.96%",
+        "threshold": ">= 15%",
+        "status": "ORANGE",
+        "message": "Biên hoạt động < 15%."
+      },
+      {
+        "metric": "Biên lợi nhuận ròng",
+        "value": "17.06%",
+        "threshold": ">= 10%",
+        "status": "GREEN",
+        "message": "Biên ròng đạt chuẩn (>=10%)."
+      }
+    ],
+    "cash_flow": [
+      {
+        "metric": "Dòng tiền tự do (FCF)",
+        "value": "3,868,360,642,710 VND",
+        "threshold": "> 0",
+        "status": "GREEN",
+        "message": "FCF dương dồi dào, khả năng tự tài trợ và trả cổ tức rất cao."
+      }
+    ],
+    "scores": {
+      "green": 5,
+      "orange": 2,
+      "red": 0
+    }
+  },
+  "economic_moat": {
+    "moats_count": 4,
+    "is_strong_moat": true,
+    "classification": "MOAT MẠNH (Hào thành kinh tế sâu)",
+    "details": [
+      {
+        "name": "Hiệu quả vốn vượt trội (Capital Efficiency)",
+        "evidence": "ROE đạt 26.1% bền vững qua các kỳ."
+      },
+      {
+        "name": "Cỗ máy in tiền mặt (Cash Generator)",
+        "evidence": "Dòng tiền tự do FCF đạt trên 3,868 tỷ đồng."
+      },
+      {
+        "name": "Cơ cấu tài chính pháo đài (Fortress Balance Sheet)",
+        "evidence": "Hệ số nợ D/E ở mức 0.39 (thấp hơn nhiều so với chuẩn 1.0)."
+      },
+      {
+        "name": "Hiệu ứng quy mô & Chi phí chuyển đổi phần mềm (Switching Costs)",
+        "evidence": "Hợp đồng IT toàn cầu dài hạn, khách hàng khó thay thế đối tác công nghệ."
+      }
+    ]
+  }
+}

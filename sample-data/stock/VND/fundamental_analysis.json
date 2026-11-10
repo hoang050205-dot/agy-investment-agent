@@ -1,0 +1,90 @@
+{
+  "symbol": "VND",
+  "company_name": "Công ty Cổ phần Chứng khoán VNDIRECT",
+  "evaluated_at": "2026-11-08T21:37:02.641659",
+  "summary": {
+    "capital_structure": "Cần theo dõi nợ vay",
+    "liquidity": "Tốt",
+    "capital_efficiency": "Trung bình",
+    "earnings_quality": "Cao",
+    "cash_flow": "Dồi dào",
+    "overall_health": "CẦN THEO DÕI"
+  },
+  "warnings": {
+    "balance_sheet": [
+      {
+        "metric": "D/E (Nợ/VCSH)",
+        "value": "1.47",
+        "threshold": "< 1.0",
+        "status": "RED",
+        "message": "Nợ vay vượt vốn chủ sở hữu, cơ cấu vốn có rủi ro tài chính."
+      },
+      {
+        "metric": "ROE",
+        "value": "10.00%",
+        "threshold": "> 15%",
+        "status": "YELLOW",
+        "message": "ROE dưới mức kỳ vọng 15%."
+      },
+      {
+        "metric": "Current Ratio",
+        "value": "1.35",
+        "threshold": ">= 1.0",
+        "status": "GREEN",
+        "message": "Khả năng thanh toán ngắn hạn dồi dào."
+      }
+    ],
+    "income_statement": [
+      {
+        "metric": "Biên lợi nhuận gộp",
+        "value": "48.50%",
+        "threshold": ">= 35%",
+        "status": "GREEN",
+        "message": "Biên lãi gộp mạnh (>35%), dấu hiệu của lợi thế định giá vượt trội."
+      },
+      {
+        "metric": "Biên lợi nhuận hoạt động",
+        "value": "37.80%",
+        "threshold": ">= 15%",
+        "status": "GREEN",
+        "message": "Biên hoạt động tốt (>15%)."
+      },
+      {
+        "metric": "Biên lợi nhuận ròng",
+        "value": "30.45%",
+        "threshold": ">= 10%",
+        "status": "GREEN",
+        "message": "Biên ròng đạt chuẩn (>=10%)."
+      }
+    ],
+    "cash_flow": [
+      {
+        "metric": "Dòng tiền tự do (FCF)",
+        "value": "2,150,000,000,000 VND",
+        "threshold": "> 0",
+        "status": "GREEN",
+        "message": "FCF dương dồi dào, khả năng tự tài trợ và trả cổ tức rất cao."
+      }
+    ],
+    "scores": {
+      "green": 5,
+      "orange": 0,
+      "red": 1
+    }
+  },
+  "economic_moat": {
+    "moats_count": 2,
+    "is_strong_moat": true,
+    "classification": "MOAT MẠNH (Hào thành kinh tế sâu)",
+    "details": [
+      {
+        "name": "Lợi thế định giá / Độc quyền (Pricing Power)",
+        "evidence": "Biên lãi gộp đạt 48.5% (vượt chuẩn 35%)."
+      },
+      {
+        "name": "Cỗ máy in tiền mặt (Cash Generator)",
+        "evidence": "Dòng tiền tự do FCF đạt trên 2,150 tỷ đồng."
+      }
+    ]
+  }
+}

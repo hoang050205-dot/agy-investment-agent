@@ -1,0 +1,224 @@
+// This Pine Script™ code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © hoang050205 & AGY Invest
+
+//@version=6
+indicator("AGY Invest - Elliott Wave & Fsen Price Action Pro", shorttitle="AGY Wave Pro", overlay=true, max_labels_count=500, max_lines_count=500)
+
+// =============================================================================
+// 1. CẤU HÌNH THÔNG SỐ (INPUTS)
+// =============================================================================
+
+grp_wave = "1. CẤU HÌNH SÓNG ELLIOTT & MÀU SẮC PHÂN CẤP"
+pivot_len       = input.int(5, "Độ nhạy đỉnh đáy (Lookback)", minval=2, maxval=20, group=grp_wave)
+show_wave_lines = input.bool(true, "Vẽ Đường Nối Sóng Zigzag", group=grp_wave)
+show_wave_lbls  = input.bool(true, "Hiển Thị Nhãn Sóng (1-2-3-4-5 & A-B-C)", group=grp_wave)
+
+// Chuẩn hóa màu sắc: Mỗi cấp độ sóng có 1 màu duy nhất, không gây rối mắt
+col_impulse = input.color(#00e5ff, "Màu Chu Kỳ Sóng Đẩy (1-2-3-4-5) - Xanh Ngọc", group=grp_wave)
+col_correct = input.color(#ff5252, "Màu Chu Kỳ Sóng Chỉnh (A-B-C) - Đỏ Cam", group=grp_wave)
+
+grp_trade = "2. KẾ HOẠCH VÀO LỆNH SNIPER (CHỈ 1 BỘ MỚI NHẤT — GẮN VÀO NẾN)"
+show_plan   = input.bool(true, "Hiển thị Kế Hoạch Vào Lệnh Mới Nhất", group=grp_trade)
+target_rr   = input.float(2.5, "Tỷ lệ Risk / Reward (R/R)", minval=1.5, step=0.1, group=grp_trade)
+plan_bars   = input.int(12, "Độ dài đường giá (Số nến)", minval=5, maxval=25, group=grp_trade)
+
+// =============================================================================
+// 2. THUẬT TOÁN ĐỈNH ĐÁY ZIGZAG & PHÂN BỔ NHÃN SÓNG ELLIOTT CHUẨN XÁC
+// =============================================================================
+
+[macd_line, signal_line, hist_line] = ta.macd(close, 12, 26, 9)
+atr_val = ta.atr(14)
+
+ph = ta.pivothigh(high, pivot_len, pivot_len)
+pl = ta.pivotlow(low, pivot_len, pivot_len)
+
+// Trạng thái Zigzag xen kẽ nghiêm ngặt (Strict Alternation)
+var int   last_dir = 0       // 1: Đỉnh, -1: Đáy
+var float last_py  = na
+var int   last_px  = na
+var label last_lbl = na
+var line  last_ln  = na
+
+var int wave_num = 0 // 1:(1), 2:(2), 3:(3), 4:(4), 5:(5), 6:(A), 7:(B), 8:(C)
+
+// XỬ LÝ ĐỈNH MỚI (PIVOT HIGH)
+if not na(ph)
+    int ph_x = bar_index - pivot_len
+    float ph_y = ph
+
+    if last_dir == 1 // Đỉnh liên tiếp -> Chỉ giữ đỉnh cao nhất, cập nhật lại tọa độ, KHÔNG TẠO MỚI TRÙNG LẶP
+        if ph_y > last_py
+            last_py := ph_y
+            last_px := ph_x
+            if not na(last_lbl)
+                label.set_xy(last_lbl, ph_x, ph_y)
+            if not na(last_ln)
+                line.set_xy2(last_ln, ph_x, ph_y)
+    else // Đáy đảo chiều thành Đỉnh mới
+        string w_name = "(3)"
+        color  w_col  = col_impulse
+
+        // Phân phối chu kỳ sóng Elliott
+        if wave_num == 0 or wave_num == 8
+            w_name   := "(1)"
+            w_col    := col_impulse
+            wave_num := 1
+        else if wave_num == 2
+            w_name   := "(3)"
+            w_col    := col_impulse
+            wave_num := 3
+        else if wave_num == 4
+            w_name   := "(5)"
+            w_col    := col_impulse
+            wave_num := 5
+        else if wave_num == 6
+            w_name   := "(B)"
+            w_col    := col_correct
+            wave_num := 7
+        else
+            w_name   := "(3)"
+            w_col    := col_impulse
+            wave_num := 3
+
+        // Vẽ đường sóng kết nối từ đáy cũ lên đỉnh mới
+        if show_wave_lines and not na(last_px) and last_px > 0 and last_py > 0
+            last_ln := line.new(last_px, last_py, ph_x, ph_y, color=color.new(w_col, 30), width=2)
+
+        // Gắn nhãn đỉnh nến: KHÔNG NỀN, cố định trực tiếp tại tọa độ đỉnh râu nến
+        if show_wave_lbls
+            last_lbl := label.new(ph_x, ph_y, w_name, 
+                                  color=color.new(color.black, 100), 
+                                  textcolor=w_col, 
+                                  style=label.style_none, 
+                                  size=size.normal)
+
+        last_dir := 1
+        last_py  := ph_y
+        last_px  := ph_x
+
+// XỬ LÝ ĐÁY MỚI (PIVOT LOW)
+if not na(pl)
+    int pl_x = bar_index - pivot_len
+    float pl_y = pl
+
+    if last_dir == -1 // Đáy liên tiếp -> Chỉ giữ đáy thấp nhất, cập nhật lại tọa độ, KHÔNG TẠO MỚI TRÙNG LẶP
+        if pl_y < last_py
+            last_py := pl_y
+            last_px := pl_x
+            if not na(last_lbl)
+                label.set_xy(last_lbl, pl_x, pl_y)
+            if not na(last_ln)
+                line.set_xy2(last_ln, pl_x, pl_y)
+    else // Đỉnh đảo chiều thành Đáy mới
+        string w_name = "(4)"
+        color  w_col  = col_impulse
+
+        if wave_num == 1
+            w_name   := "(2)"
+            w_col    := col_impulse
+            wave_num := 2
+        else if wave_num == 3
+            w_name   := "(4)"
+            w_col    := col_impulse
+            wave_num := 4
+        else if wave_num == 5
+            w_name   := "(A)"
+            w_col    := col_correct
+            wave_num := 6
+        else if wave_num == 7
+            w_name   := "(C)"
+            w_col    := col_correct
+            wave_num := 8
+        else
+            w_name   := "(2)"
+            w_col    := col_impulse
+            wave_num := 2
+
+        // Vẽ đường sóng kết nối từ đỉnh cũ xuống đáy mới
+        if show_wave_lines and not na(last_px) and last_px > 0 and last_py > 0
+            last_ln := line.new(last_px, last_py, pl_x, pl_y, color=color.new(w_col, 30), width=2)
+
+        // Gắn nhãn đáy nến: KHÔNG NỀN, cố định trực tiếp tại tọa độ đáy râu nến
+        if show_wave_lbls
+            last_lbl := label.new(pl_x, pl_y, w_name, 
+                                  color=color.new(color.black, 100), 
+                                  textcolor=w_col, 
+                                  style=label.style_none, 
+                                  size=size.normal)
+
+        last_dir := -1
+        last_py  := pl_y
+        last_px  := pl_x
+
+// =============================================================================
+// 3. TÍN HIỆU VÀO LỆNH FSEN PRICE ACTION (SÁT NẾN, TINH GỌN)
+// =============================================================================
+
+body       = math.abs(close - open)
+lower_wick = math.min(open, close) - low
+upper_wick = high - math.max(open, close)
+
+is_hammer = (lower_wick >= 1.2 * body) and (close >= open or (close - low) > (high - close))
+is_star   = (upper_wick >= 1.2 * body) and (close <= open or (high - close) > (close - low))
+
+// Tín hiệu Mua: Hoàn tất Sóng (2), (4) hoặc (C) + Nến Rút Chân + Xung Lượng MACD Histogram Tăng
+bool sig_buy  = (wave_num == 2 or wave_num == 4 or wave_num == 8) and is_hammer and (hist_line > hist_line[1])
+
+// Tín hiệu Bán: Hoàn tất Sóng (5) hoặc (B) + Nến Đảo Chiều + Xung Lượng MACD Histogram Giảm
+bool sig_sell = (wave_num == 5 or wave_num == 7) and is_star and (hist_line < hist_line[1])
+
+// Đánh dấu icon tam giác nhỏ sát nến
+plotshape(sig_buy, "MUA", shape.triangleup, location.belowbar, color=#00e676, size=size.tiny)
+plotshape(sig_sell, "BÁN", shape.triangledown, location.abovebar, color=#ff5252, size=size.tiny)
+
+// =============================================================================
+// 4. KẾ HOẠCH VÀO LỆNH SNIPER (CHỈ DUY NHẤT 1 BỘ MỚI NHẤT — GẮN CHẶT VÀO NẾN)
+// =============================================================================
+
+var line  line_entry = na
+var line  line_sl    = na
+var line  line_tp    = na
+var label lbl_entry  = na
+var label lbl_sl     = na
+var label lbl_tp     = na
+
+if show_plan and (sig_buy or sig_sell)
+    // Tự động dọn sạch kế hoạch cũ để KHÔNG BAO GIỜ bị rác chart
+    line.delete(line_entry)
+    line.delete(line_sl)
+    line.delete(line_tp)
+    label.delete(lbl_entry)
+    label.delete(lbl_sl)
+    label.delete(lbl_tp)
+
+    int x1 = bar_index
+    int x2 = bar_index + plan_bars
+
+    if sig_buy
+        float pe = close
+        float ps = math.max(pe * 0.5, pe - (1.2 * atr_val))
+        float risk = pe - ps
+        float pt = pe + (risk * target_rr)
+
+        line_entry := line.new(x1, pe, x2, pe, color=col_impulse, width=2)
+        line_sl    := line.new(x1, ps, x2, ps, color=col_correct, width=2, style=line.style_dashed)
+        line_tp    := line.new(x1, pt, x2, pt, color=#00e676, width=2)
+
+        lbl_entry := label.new(x2, pe, "Entry: " + str.tostring(pe, "#.##"), color=color.new(color.black, 100), textcolor=col_impulse, style=label.style_none, size=size.small)
+        lbl_sl    := label.new(x2, ps, "SL: " + str.tostring(ps, "#.##"), color=color.new(color.black, 100), textcolor=col_correct, style=label.style_none, size=size.small)
+        lbl_tp    := label.new(x2, pt, "TP (" + str.tostring(target_rr, "#.#") + "R): " + str.tostring(pt, "#.##"), color=color.new(color.black, 100), textcolor=#00e676, style=label.style_none, size=size.small)
+
+    if sig_sell
+        float pe = close
+        float ps = pe + (1.2 * atr_val)
+        float risk = ps - pe
+        // Chặn cận dưới TP tối thiểu bằng 75% giá hiện tại -> Tuyệt đối không bao giờ về 0 hay số âm!
+        float pt = math.max(pe * 0.75, pe - (risk * target_rr))
+
+        line_entry := line.new(x1, pe, x2, pe, color=#ffb300, width=2)
+        line_sl    := line.new(x1, ps, x2, ps, color=col_correct, width=2, style=line.style_dashed)
+        line_tp    := line.new(x1, pt, x2, pt, color=#00e676, width=2)
+
+        lbl_entry := label.new(x2, pe, "Sell: " + str.tostring(pe, "#.##"), color=color.new(color.black, 100), textcolor=#ffb300, style=label.style_none, size=size.small)
+        lbl_sl    := label.new(x2, ps, "SL: " + str.tostring(ps, "#.##"), color=color.new(color.black, 100), textcolor=col_correct, style=label.style_none, size=size.small)
+        lbl_tp    := label.new(x2, pt, "TP (" + str.tostring(target_rr, "#.#") + "R): " + str.tostring(pt, "#.##"), color=color.new(color.black, 100), textcolor=#00e676, style=label.style_none, size=size.small)

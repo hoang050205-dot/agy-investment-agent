@@ -1,0 +1,302 @@
+{
+  "XAUUSD": {
+    "direction": "SHORT (Bán Hạ Tỷ Trọng)",
+    "pattern": "Sóng Tuần Dự Kiến Là Zigzag [5-3-5]",
+    "is_bullish": false,
+    "anchor_p0": 4891.54,
+    "anchor_p1": 4116.76,
+    "anchor_p2": 4450.0,
+    "invalidation": 4697.105,
+    "h1": 774.78,
+    "ret2_pct": 43.0,
+    "w3_target": 3637.95,
+    "prz_w3": [
+      3637.95,
+      3729.37
+    ],
+    "w4_target": 3948.15,
+    "w5_target": 3341.98,
+    "prz_w5": [
+      3275.14,
+      3408.82
+    ],
+    "wa_target": 3933.91,
+    "wb_target": 3637.94,
+    "wc_target": 4229.87,
+    "overlap_violation": false,
+    "rr_w3": 3.29,
+    "w3_fibo": "-0.5 & -0.618 x H1",
+    "w4_fibo": "0.382 x W3",
+    "w5_fibo": "-1.000 x H1",
+    "time_projection": {
+      "t0_start": "2025-10-15",
+      "t1_wave1": "2026-03-10",
+      "t2_wave2": "2026-07-20",
+      "dur_wave1_days": 146,
+      "dur_wave1_weeks": 20.9,
+      "dur_wave2_days": 132,
+      "dur_wave2_weeks": 18.9,
+      "t3_projected_date": "2027-03-13",
+      "t3_projected_quarter": "Q1/2027 (03/2027)",
+      "t4_projected_date": "2027-07-23",
+      "t4_projected_quarter": "Q3/2027 (07/2027)",
+      "t5_projected_date": "2027-12-16",
+      "t5_projected_quarter": "Q4/2027 (12/2027)",
+      "ta_projected_date": "2028-03-15",
+      "ta_projected_quarter": "Q1/2028 (03/2028)",
+      "tb_projected_date": "2028-06-04",
+      "tb_projected_quarter": "Q2/2028 (06/2028)",
+      "tc_projected_date": "2028-10-28",
+      "tc_projected_quarter": "Q4/2028 (10/2028)",
+      "time_overview_str": "W3? (Q1/2027 (03/2027)) -> W5? (Q4/2027 (12/2027)) -> Sóng C? (Q4/2028 (10/2028))"
+    },
+    "notes": "Tuân thủ thiết luật Fsen: Sóng 3 không ngắn nhất; Sóng 4 không vi phạm đỉnh Sóng 1; Đáy Sóng C phân kỳ dương MACD.",
+    "meta": {
+      "name": "Gold Spot / U.S. Dollar (XAUUSD)",
+      "timeframe": "1W (Khung Tuần)",
+      "is_bullish": false,
+      "p0": 4891.54,
+      "p1": 4116.76,
+      "p2": 4450.0,
+      "custom_invalidation": 4697.105,
+      "pattern_type": "Sóng Tuần Dự Kiến Là Zigzag [5-3-5]",
+      "t0": "2025-10-15",
+      "t1": "2026-03-10",
+      "t2": "2026-07-20",
+      "target_zone_w3": [
+        3355.0,
+        3467.0
+      ],
+      "target_zone_w5": [
+        2934.0,
+        2992.0
+      ],
+      "ath_target": 4891.54
+    }
+  },
+  "VND": {
+    "direction": "LONG (Mua Bứt Phá)",
+    "pattern": "Sóng Đẩy Mở Rộng [5-3-5-3-5] (Khởi đầu Sóng 3)",
+    "is_bullish": true,
+    "anchor_p0": 12.6,
+    "anchor_p1": 14.95,
+    "anchor_p2": 14.35,
+    "invalidation": 12.6,
+    "h1": 2.35,
+    "ret2_pct": 25.5,
+    "w3_target": 18.15,
+    "prz_w3": [
+      17.61,
+      18.69
+    ],
+    "w4_target": 16.7,
+    "w5_target": 19.05,
+    "prz_w5": [
+      18.48,
+      19.62
+    ],
+    "wa_target": 16.59,
+    "wb_target": 17.82,
+    "wc_target": 15.36,
+    "overlap_violation": false,
+    "rr_w3": 2.17,
+    "w3_fibo": "1.618 x H1",
+    "w4_fibo": "0.382 x W3",
+    "w5_fibo": "1.000 x H1",
+    "time_projection": {
+      "t0_start": "2026-08-15",
+      "t1_wave1": "2026-09-30",
+      "t2_wave2": "2026-10-25",
+      "dur_wave1_days": 46,
+      "dur_wave1_weeks": 6.6,
+      "dur_wave2_days": 25,
+      "dur_wave2_weeks": 3.6,
+      "t3_projected_date": "2027-01-07",
+      "t3_projected_quarter": "Q1/2027 (01/2027)",
+      "t4_projected_date": "2027-02-01",
+      "t4_projected_quarter": "Q1/2027 (02/2027)",
+      "t5_projected_date": "2027-03-19",
+      "t5_projected_quarter": "Q1/2027 (03/2027)",
+      "ta_projected_date": "2027-04-16",
+      "ta_projected_quarter": "Q2/2027 (04/2027)",
+      "tb_projected_date": "2027-05-01",
+      "tb_projected_quarter": "Q2/2027 (05/2027)",
+      "tc_projected_date": "2027-06-16",
+      "tc_projected_quarter": "Q2/2027 (06/2027)",
+      "time_overview_str": "W3? (Q1/2027 (01/2027)) -> W5? (Q1/2027 (03/2027)) -> Sóng C? (Q2/2027 (06/2027))"
+    },
+    "notes": "Tuân thủ thiết luật Fsen: Sóng 3 không ngắn nhất; Sóng 4 không vi phạm đỉnh Sóng 1; Đáy Sóng C phân kỳ dương MACD.",
+    "meta": {
+      "name": "CTCP Chứng khoán VNDIRECT (HOSE: VND)",
+      "timeframe": "1W (Khung Tuần)",
+      "is_bullish": true,
+      "p0": 12.6,
+      "p1": 14.95,
+      "p2": 14.35,
+      "custom_invalidation": 12.6,
+      "pattern_type": "Sóng Đẩy Mở Rộng [5-3-5-3-5] (Khởi đầu Sóng 3)",
+      "t0": "2026-08-15",
+      "t1": "2026-09-30",
+      "t2": "2026-10-25",
+      "target_zone_w3": [
+        17.5,
+        18.5
+      ],
+      "target_zone_w5": [
+        20.5,
+        21.5
+      ],
+      "ath_target": 29.0
+    }
+  },
+  "FPT": {
+    "direction": "LONG (Mua Bứt Phá)",
+    "pattern": "Hoàn Tất Sóng 2 Flat -> Sóng 3 Mở Rộng",
+    "is_bullish": true,
+    "anchor_p0": 49.55,
+    "anchor_p1": 53.0,
+    "anchor_p2": 50.8,
+    "invalidation": 49.55,
+    "h1": 3.45,
+    "ret2_pct": 63.8,
+    "w3_target": 56.38,
+    "prz_w3": [
+      54.69,
+      58.07
+    ],
+    "w4_target": 54.25,
+    "w5_target": 57.7,
+    "prz_w5": [
+      55.97,
+      59.43
+    ],
+    "wa_target": 54.59,
+    "wb_target": 56.15,
+    "wc_target": 53.04,
+    "overlap_violation": false,
+    "rr_w3": 4.46,
+    "w3_fibo": "1.618 x H1",
+    "w4_fibo": "0.382 x W3",
+    "w5_fibo": "1.000 x H1",
+    "time_projection": {
+      "t0_start": "2026-07-10",
+      "t1_wave1": "2026-09-15",
+      "t2_wave2": "2026-10-20",
+      "dur_wave1_days": 67,
+      "dur_wave1_weeks": 9.6,
+      "dur_wave2_days": 35,
+      "dur_wave2_weeks": 5.0,
+      "t3_projected_date": "2027-02-05",
+      "t3_projected_quarter": "Q1/2027 (02/2027)",
+      "t4_projected_date": "2027-03-12",
+      "t4_projected_quarter": "Q1/2027 (03/2027)",
+      "t5_projected_date": "2027-05-18",
+      "t5_projected_quarter": "Q2/2027 (05/2027)",
+      "ta_projected_date": "2027-06-28",
+      "ta_projected_quarter": "Q2/2027 (06/2027)",
+      "tb_projected_date": "2027-07-19",
+      "tb_projected_quarter": "Q3/2027 (07/2027)",
+      "tc_projected_date": "2027-09-24",
+      "tc_projected_quarter": "Q3/2027 (09/2027)",
+      "time_overview_str": "W3? (Q1/2027 (02/2027)) -> W5? (Q2/2027 (05/2027)) -> Sóng C? (Q3/2027 (09/2027))"
+    },
+    "notes": "Tuân thủ thiết luật Fsen: Sóng 3 không ngắn nhất; Sóng 4 không vi phạm đỉnh Sóng 1; Đáy Sóng C phân kỳ dương MACD.",
+    "meta": {
+      "name": "CTCP FPT (HOSE: FPT)",
+      "timeframe": "1W (Khung Tuần)",
+      "is_bullish": true,
+      "p0": 49.55,
+      "p1": 53.0,
+      "p2": 50.8,
+      "custom_invalidation": 49.55,
+      "pattern_type": "Hoàn Tất Sóng 2 Flat -> Sóng 3 Mở Rộng",
+      "t0": "2026-07-10",
+      "t1": "2026-09-15",
+      "t2": "2026-10-20",
+      "target_zone_w3": [
+        56.0,
+        58.0
+      ],
+      "target_zone_w5": [
+        70.0,
+        75.0
+      ],
+      "ath_target": 82.0
+    }
+  },
+  "BTCUSD": {
+    "direction": "SHORT (Bán Hạ Tỷ Trọng)",
+    "pattern": "Sóng Tuần Dự Kiến Là Expanded Flat / Bão Sóng C",
+    "is_bullish": false,
+    "anchor_p0": 88500.0,
+    "anchor_p1": 68000.0,
+    "anchor_p2": 80800.0,
+    "invalidation": 88500.0,
+    "h1": 20500.0,
+    "ret2_pct": 62.4,
+    "w3_target": 55331.0,
+    "prz_w3": [
+      55331.0,
+      57750.0
+    ],
+    "w4_target": 65060.16,
+    "w5_target": 47500.0,
+    "prz_w5": [
+      46550.0,
+      48450.0
+    ],
+    "wa_target": 63162.0,
+    "wb_target": 55331.0,
+    "wc_target": 70993.0,
+    "overlap_violation": false,
+    "rr_w3": 3.31,
+    "w3_fibo": "-0.5 & -0.618 x H1",
+    "w4_fibo": "0.382 x W3",
+    "w5_fibo": "-1.000 x H1",
+    "time_projection": {
+      "t0_start": "2026-03-20",
+      "t1_wave1": "2026-06-15",
+      "t2_wave2": "2026-09-10",
+      "dur_wave1_days": 87,
+      "dur_wave1_weeks": 12.4,
+      "dur_wave2_days": 87,
+      "dur_wave2_weeks": 12.4,
+      "t3_projected_date": "2027-01-28",
+      "t3_projected_quarter": "Q1/2027 (01/2027)",
+      "t4_projected_date": "2027-04-25",
+      "t4_projected_quarter": "Q2/2027 (04/2027)",
+      "t5_projected_date": "2027-07-21",
+      "t5_projected_quarter": "Q3/2027 (07/2027)",
+      "ta_projected_date": "2027-09-12",
+      "ta_projected_quarter": "Q3/2027 (09/2027)",
+      "tb_projected_date": "2027-11-04",
+      "tb_projected_quarter": "Q4/2027 (11/2027)",
+      "tc_projected_date": "2028-01-30",
+      "tc_projected_quarter": "Q1/2028 (01/2028)",
+      "time_overview_str": "W3? (Q1/2027 (01/2027)) -> W5? (Q3/2027 (07/2027)) -> Sóng C? (Q1/2028 (01/2028))"
+    },
+    "notes": "Tuân thủ thiết luật Fsen: Sóng 3 không ngắn nhất; Sóng 4 không vi phạm đỉnh Sóng 1; Đáy Sóng C phân kỳ dương MACD.",
+    "meta": {
+      "name": "Bitcoin / U.S. Dollar (BTCUSD)",
+      "timeframe": "1W (Khung Tuần)",
+      "is_bullish": false,
+      "p0": 88500.0,
+      "p1": 68000.0,
+      "p2": 80800.0,
+      "custom_invalidation": 88500.0,
+      "pattern_type": "Sóng Tuần Dự Kiến Là Expanded Flat / Bão Sóng C",
+      "t0": "2026-03-20",
+      "t1": "2026-06-15",
+      "t2": "2026-09-10",
+      "target_zone_w3": [
+        47631.0,
+        48500.0
+      ],
+      "target_zone_w5": [
+        37949.0,
+        39500.0
+      ],
+      "ath_target": 88500.0
+    }
+  }
+}

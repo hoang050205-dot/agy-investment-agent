@@ -1,0 +1,94 @@
+{
+  "symbol": "SIP",
+  "company_name": "Công ty Cổ phần Đầu tư Sài Gòn VRG",
+  "evaluated_at": "2026-11-10T11:12:25.249320",
+  "summary": {
+    "capital_structure": "Cần theo dõi nợ vay",
+    "liquidity": "Tốt",
+    "capital_efficiency": "Xuất sắc",
+    "earnings_quality": "Cao",
+    "cash_flow": "Dồi dào",
+    "overall_health": "CẦN THEO DÕI"
+  },
+  "warnings": {
+    "balance_sheet": [
+      {
+        "metric": "D/E (Nợ/VCSH)",
+        "value": "1.06",
+        "threshold": "< 1.0",
+        "status": "RED",
+        "message": "Nợ vay vượt vốn chủ sở hữu, cơ cấu vốn có rủi ro tài chính."
+      },
+      {
+        "metric": "ROE",
+        "value": "26.76%",
+        "threshold": "> 15%",
+        "status": "GREEN_DARK",
+        "message": "Hiệu quả sử dụng vốn chủ sở hữu vượt trội (>15%)."
+      },
+      {
+        "metric": "Current Ratio",
+        "value": "2.82",
+        "threshold": ">= 1.0",
+        "status": "GREEN",
+        "message": "Khả năng thanh toán ngắn hạn dồi dào."
+      }
+    ],
+    "income_statement": [
+      {
+        "metric": "Biên lợi nhuận gộp",
+        "value": "15.70%",
+        "threshold": ">= 35%",
+        "status": "ORANGE",
+        "message": "Biên lãi gộp < 35%, cần lưu ý về sức mạnh định giá sản phẩm."
+      },
+      {
+        "metric": "Biên lợi nhuận hoạt động",
+        "value": "13.98%",
+        "threshold": ">= 15%",
+        "status": "ORANGE",
+        "message": "Biên hoạt động < 15%."
+      },
+      {
+        "metric": "Biên lợi nhuận ròng",
+        "value": "14.74%",
+        "threshold": ">= 10%",
+        "status": "GREEN",
+        "message": "Biên ròng đạt chuẩn (>=10%)."
+      }
+    ],
+    "cash_flow": [
+      {
+        "metric": "Dòng tiền tự do (FCF)",
+        "value": "3,703,939,824,510 VND",
+        "threshold": "> 0",
+        "status": "GREEN",
+        "message": "FCF dương dồi dào, khả năng tự tài trợ và trả cổ tức rất cao."
+      }
+    ],
+    "scores": {
+      "green": 4,
+      "orange": 2,
+      "red": 1
+    }
+  },
+  "economic_moat": {
+    "moats_count": 3,
+    "is_strong_moat": true,
+    "classification": "MOAT MẠNH (Hào thành kinh tế sâu)",
+    "details": [
+      {
+        "name": "Hiệu quả vốn vượt trội (Capital Efficiency)",
+        "evidence": "ROE đạt 26.8% bền vững qua các kỳ."
+      },
+      {
+        "name": "Cỗ máy in tiền mặt (Cash Generator)",
+        "evidence": "Dòng tiền tự do FCF đạt trên 3,704 tỷ đồng."
+      },
+      {
+        "name": "Rào cản quỹ đất & Doanh thu chưa thực hiện (Real Estate Moat)",
+        "evidence": "Quỹ đất KCN sạch quy mô lớn, dòng tiền khách hàng trả trước dài hạn."
+      }
+    ]
+  }
+}

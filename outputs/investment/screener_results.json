@@ -1,0 +1,138 @@
+[
+  {
+    "symbol": "FPT",
+    "name": "Công ty Cổ phần FPT",
+    "market": "VN_EQUITY",
+    "current_price": 50.8,
+    "intrinsic_value": 72.5,
+    "margin_of_safety_pct": 42.72,
+    "fa_score": 100.0,
+    "val_score": 100.0,
+    "ta_score": 100.0,
+    "wave_score": 100.0,
+    "combined_score": 100.0,
+    "presets": [
+      "Siêu Cổ Phiếu Giá Trị"
+    ],
+    "wave_status": "Hoàn tất Sóng điều chỉnh C tại 49.55k, bắt đầu Sóng 1 đẩy",
+    "recommendation": "MUA MẠNH (BUY)",
+    "rank": 1
+  },
+  {
+    "symbol": "SIP",
+    "name": "CTCP Đầu tư Sài Gòn VRG",
+    "market": "VN_EQUITY",
+    "current_price": 61.3,
+    "intrinsic_value": 81.28,
+    "margin_of_safety_pct": 32.59,
+    "fa_score": 100.0,
+    "val_score": 85.0,
+    "ta_score": 100.0,
+    "wave_score": 100.0,
+    "combined_score": 95.5,
+    "presets": [
+      "Siêu Cổ Phiếu Giá Trị",
+      "Bùng Nổ Đà Tăng",
+      "Cổ Tức Bền Vững",
+      "Theo Dõi Kích Hoạt (Watchlist)"
+    ],
+    "wave_status": "Kết thúc Sóng 2 điều chỉnh phẳng (Flat), chuẩn bị vào Sóng 3 mở rộng",
+    "recommendation": "MUA MẠNH (BUY)",
+    "rank": 2
+  },
+  {
+    "symbol": "MWG",
+    "name": "CTCP Đầu tư Thế Giới Di Động",
+    "market": "VN_EQUITY",
+    "current_price": 63.8,
+    "intrinsic_value": 74.0,
+    "margin_of_safety_pct": 15.99,
+    "fa_score": 75.0,
+    "val_score": 65.0,
+    "ta_score": 100.0,
+    "wave_score": 95.0,
+    "combined_score": 81.2,
+    "presets": [
+      "Bùng Nổ Đà Tăng"
+    ],
+    "wave_status": "Đang chạy Sóng 3 đẩy trung hạn",
+    "recommendation": "MUA MẠNH (BUY)",
+    "rank": 3
+  },
+  {
+    "symbol": "HPG",
+    "name": "CTCP Tập đoàn Hòa Phát",
+    "market": "VN_EQUITY",
+    "current_price": 27.2,
+    "intrinsic_value": 34.5,
+    "margin_of_safety_pct": 26.84,
+    "fa_score": 75.0,
+    "val_score": 85.0,
+    "ta_score": 50.0,
+    "wave_score": 75.0,
+    "combined_score": 71.8,
+    "presets": [
+      "Siêu Cổ Phiếu Giá Trị",
+      "Theo Dõi Kích Hoạt (Watchlist)"
+    ],
+    "wave_status": "Sóng 4 tích lũy mô hình tam giác thu hẹp",
+    "recommendation": "TÍCH LŨY (ACCUMULATE)",
+    "rank": 4
+  },
+  {
+    "symbol": "VNM",
+    "name": "CTCP Sữa Việt Nam",
+    "market": "VN_EQUITY",
+    "current_price": 66.5,
+    "intrinsic_value": 78.0,
+    "margin_of_safety_pct": 17.29,
+    "fa_score": 100.0,
+    "val_score": 65.0,
+    "ta_score": 20.0,
+    "wave_score": 90.0,
+    "combined_score": 68.0,
+    "presets": [
+      "Bắt Đáy Quá Bán",
+      "Cổ Tức Bền Vững"
+    ],
+    "wave_status": "Hoàn thành Sóng C lớn khung tháng",
+    "recommendation": "THEO DÕI (WATCHLIST)",
+    "rank": 5
+  },
+  {
+    "symbol": "VND",
+    "name": "CTCP Chứng khoán VNDIRECT",
+    "market": "VN_EQUITY",
+    "current_price": 14.95,
+    "intrinsic_value": 14.95,
+    "margin_of_safety_pct": 0.0,
+    "fa_score": 50.0,
+    "val_score": 15.0,
+    "ta_score": 100.0,
+    "wave_score": 90.0,
+    "combined_score": 58.0,
+    "presets": [
+      "Theo Dõi Kích Hoạt (Watchlist)"
+    ],
+    "wave_status": "Hoàn tất Sóng C điều chỉnh lớn, hình thành Sóng (1) đẩy hồi phục",
+    "recommendation": "THEO DÕI (WATCHLIST)",
+    "rank": 6
+  },
+  {
+    "symbol": "BTCUSD",
+    "name": "Bitcoin / U.S. Dollar",
+    "market": "GLOBAL_CRYPTO",
+    "current_price": 75870.0,
+    "intrinsic_value": 65000.0,
+    "margin_of_safety_pct": -14.33,
+    "fa_score": 75.0,
+    "val_score": 15.0,
+    "ta_score": 45.0,
+    "wave_score": 50.0,
+    "combined_score": 45.8,
+    "presets": [],
+    "wave_status": "Sóng (A) 57.8k, Sóng (B) 87.4k; Hiện tại đang trong Sóng (C) đổ đèo",
+    "recommendation": "THEO DÕI (WATCHLIST)",
+    "rank": 7
+  }
+]

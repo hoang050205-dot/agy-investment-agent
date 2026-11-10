@@ -1,0 +1,89 @@
+{
+  "symbol": "SIP",
+  "evaluated_at": "2026-11-10T11:12:25.474858",
+  "final_recommendation": "KHUYẾN NGHỊ MUA THẬN TRỌNG (Một phương pháp đạt biên an toàn > 25%)",
+  "asset_valuation": {
+    "method": "Định Giá Tài Sản Ròng (Bóc Tách Nợ Chiếm Dụng)",
+    "inputs": {
+      "total_assets_bil": 28410.11,
+      "total_liabilities_bil": 22713.46,
+      "unearned_advances_bil": 13981.25,
+      "shares_outstanding_mil": 242.11,
+      "current_price_k": 61.3
+    },
+    "recalculated_debt_bil": 8732.21,
+    "enterprise_value_bil": 19677.9,
+    "intrinsic_value_per_share": 81.28,
+    "margin_of_safety_pct": 32.59,
+    "recommendation": "MUA (Đạt tiêu chuẩn an toàn)",
+    "is_buy": true
+  },
+  "dcf_valuation": {
+    "method": "DCF (Chiết Khấu Dòng Tiền 10 Năm)",
+    "inputs": {
+      "lnst_5y": [
+        650.0,
+        780.0,
+        920.0,
+        1050.0,
+        1203.87
+      ],
+      "shares_outstanding_mil": 242.11,
+      "current_price_k": 61.3,
+      "discount_rate": 0.1,
+      "inflation_rate": 0.07
+    },
+    "growth_rates": {
+      "g1": 0.2,
+      "g2": 0.1795,
+      "g3": 0.1413,
+      "g4": 0.1465,
+      "g_proposed": 0.1668,
+      "g_estimated": 0.0834
+    },
+    "projections": {
+      "nominal_10y": [
+        1304.29,
+        1413.09,
+        1530.97,
+        1658.68,
+        1797.04,
+        1797.04,
+        1797.04,
+        1797.04,
+        1797.04,
+        1797.04
+      ],
+      "real_10y": [
+        1218.97,
+        1234.25,
+        1249.73,
+        1265.4,
+        1281.26,
+        1197.44,
+        1119.11,
+        1045.89,
+        977.47,
+        913.52
+      ],
+      "pv_10y": [
+        1108.15,
+        1020.04,
+        938.94,
+        864.28,
+        795.56,
+        675.93,
+        574.28,
+        487.92,
+        414.54,
+        352.2
+      ]
+    },
+    "enterprise_value_bil": 7231.84,
+    "intrinsic_value_per_share": 29.87,
+    "current_price": 61.3,
+    "margin_of_safety_pct": -51.27,
+    "recommendation": "KHÔNG MUA (Chưa đủ biên an toàn > 25%)",
+    "is_buy": false
+  }
+}

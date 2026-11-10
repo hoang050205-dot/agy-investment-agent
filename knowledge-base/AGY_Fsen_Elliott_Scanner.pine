@@ -1,0 +1,418 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © AGY Investment Team
+// AGY Fsen Elliott Wave Scanner & Forecaster v3.0 Pro
+// Developed for Vietnamese Stock Market (HOSE/HNX), Gold (XAUUSD), Crypto (BTC) & Global Assets
+//@version=6
+indicator("AGY Fsen Elliott Wave Scanner & Forecaster [Pro]", shorttitle="AGY Fsen EW Forecaster", overlay=true, max_lines_count=500, max_labels_count=500, max_boxes_count=200, max_bars_back=1000)
+
+// =============================================================================
+// INPUTS & CONFIGURATION
+// =============================================================================
+string GRP_GEN  = "⚙️ Cấu Hình Chung & Chu Kỳ"
+string GRP_PIV  = "🔍 Nhận Diện Đỉnh Đáy (Pivots)"
+string GRP_EW   = "📐 Khung Lý Thuyết Fsen & Elliott Rules"
+string GRP_PROJ = "🔮 Dự Báo Sóng Tương Lai (Projections)"
+string GRP_VIS  = "🎨 Trực Quan Hóa (Visuals & Zones)"
+string GRP_DASH = "📊 Bảng Điều Khiển HUD (Stats Board)"
+string GRP_ALT  = "🔔 Cảnh Báo (Alerts)"
+
+// Pivot Inputs
+piv_left        = input.int(5,     "Pivot Trái (Left Bars)",       minval=2,  maxval=50,  group=GRP_PIV)
+piv_right       = input.int(5,     "Pivot Phải (Right Bars)",      minval=2,  maxval=50,  group=GRP_PIV)
+max_piv         = input.int(500,   "Số Lượng Pivots Tối Đa",       minval=10, maxval=1000,group=GRP_PIV)
+cooldown        = input.int(5,     "Thời Gian Chờ Mẫu Hình (Bars)",minval=1,  maxval=50,  group=GRP_GEN)
+max_patterns    = input.int(3,     "Số Mẫu Hình Lưu Trên Chart",   minval=1,  maxval=10,  group=GRP_GEN)
+
+// Fsen Elliott Rules
+fib_tol         = input.float(12.0,"Dung Sai Fibo (%)",            minval=1.0,maxval=30.0,step=0.5,group=GRP_EW) / 100.0
+min_size_atr    = input.float(0.8, "Biên Độ Tối Thiểu (ATR×)",     minval=0.1,maxval=10.0,step=0.1,group=GRP_EW)
+req_w3_not_short= input.bool(true, "Thiết Luật: Sóng 3 Không Ngắn Nhất", group=GRP_EW, tooltip="Theo thiết luật Ralph Nelson Elliott & Fsen: Sóng 3 không bao giờ là sóng ngắn nhất trong 3 sóng đẩy (1, 3, 5).")
+req_w4_no_ol    = input.bool(true, "Thiết Luật: Sóng 4 Không Chồng Lấn Sóng 1 (Trừ Sóng Chéo)", group=GRP_EW, tooltip="Sóng 4 không được xâm phạm vùng giá Sóng 1 trong Sóng Đẩy thường; được phép xâm phạm nếu là Sóng Chéo (Diagonal).")
+allow_diagonals = input.bool(true, "Cho Phép Sóng Chéo (Leading/Ending Diagonal)", group=GRP_EW, tooltip="Sóng chéo hội tụ/mở rộng theo chuẩn Fsen (Sóng 4 phạm vào Sóng 1).")
+use_vol_confirm = input.bool(true, "Xác Nhận Khối Lượng Sóng 3 (Vol SMA20)", group=GRP_EW)
+
+// Future Projections
+show_projections= input.bool(true, "Dự Báo Sóng Tương Lai (3?, 4?, 5?, ABC?)", group=GRP_PROJ, tooltip="Tự động tính toán các bước sóng tương lai dựa trên Sóng 1 và Sóng 2 đằng trước.")
+w3_fibo_mult    = input.float(1.618, "Hệ Số Mở Rộng Sóng 3? (× Sóng 1)", step=0.1, group=GRP_PROJ)
+w4_fibo_ret     = input.float(0.382, "Hệ Số Thoái Lui Sóng 4? (× Sóng 3)", step=0.05, group=GRP_PROJ)
+w5_fibo_mult    = input.float(1.000, "Hệ Số Biên Độ Sóng 5? (× Sóng 1)", step=0.1, group=GRP_PROJ)
+proj_bars_w3    = input.int(8,     "Chu Kỳ Nến Dự Báo Sóng 3?", minval=2, maxval=50, group=GRP_PROJ)
+proj_bars_w4    = input.int(5,     "Chu Kỳ Nến Dự Báo Sóng 4?", minval=2, maxval=50, group=GRP_PROJ)
+proj_bars_w5    = input.int(8,     "Chu Kỳ Nến Dự Báo Sóng 5?", minval=2, maxval=50, group=GRP_PROJ)
+
+// Visualization
+show_impulse    = input.bool(true, "Hiển Thị Sóng Đẩy (1-2-3-4-5)", group=GRP_VIS)
+show_correction = input.bool(true, "Hiển Thị Sóng Chỉnh (A-B-C)",    group=GRP_VIS)
+show_choch      = input.bool(true, "Hiển Thị Nhãn CHoCH (Đảo Cấu Trúc)", group=GRP_VIS)
+show_target_zones= input.bool(true,"Hiển Thị Vùng Mục Tiêu Hộp Vàng (Target Zones)", group=GRP_VIS)
+show_invalid    = input.bool(true, "Hiển Thị Đường Vô Hiệu (INVALID Line)", group=GRP_VIS)
+show_fib_lines  = input.bool(true, "Hiển Thị Thước Đo Fibonacci Dự Báo", group=GRP_VIS)
+col_impulse     = input.color(color.rgb(0, 200, 255), "Màu Sóng Đẩy Tăng (Cyan)", group=GRP_VIS)
+col_imp_bear    = input.color(color.rgb(255, 80, 80), "Màu Sóng Đẩy Giảm (Red)",  group=GRP_VIS)
+col_correction  = input.color(color.rgb(255, 160, 0), "Màu Sóng Điều Chỉnh (Orange)", group=GRP_VIS)
+col_proj_line   = input.color(color.rgb(160, 160, 180), "Màu Đường Dự Báo (Gray Dashed)", group=GRP_VIS)
+col_zone_box    = input.color(color.rgb(255, 230, 80), "Màu Hộp Vùng Mục Tiêu (Yellow)", group=GRP_VIS)
+col_invalid     = input.color(color.rgb(255, 40, 80), "Màu Đường Vô Hiệu Hóa", group=GRP_VIS)
+
+// HUD Table
+show_hud        = input.bool(true, "Bật Bảng Thông Số HUD (Góc Phải)", group=GRP_DASH)
+show_proj_box   = input.bool(true, "Hiển Thị Hộp Dự Báo Sóng Fsen (Góc Trái)", group=GRP_VIS)
+dash_bg_color   = input.color(color.rgb(15, 20, 32, 10), "Màu Nền HUD", group=GRP_DASH)
+dash_txt_color  = input.color(color.rgb(230, 235, 245),  "Màu Chữ HUD", group=GRP_DASH)
+
+// Alerts
+alert_impulse    = input.bool(true, "Báo Động: Phát Hiện Sóng Đẩy", group=GRP_ALT)
+alert_choch      = input.bool(true, "Báo Động: Xác Nhận CHoCH",    group=GRP_ALT)
+
+// =============================================================================
+// TYPES & DATA STRUCTURES
+// =============================================================================
+type Pivot
+    float p
+    int   i
+
+type WavePattern
+    bool   detected
+    string name
+    bool   isBullish
+    int    p0_i
+    float  p0_p
+    int    p1_i
+    float  p1_p
+    int    p2_i
+    float  p2_p
+    int    p3_i
+    float  p3_p
+    int    p4_i
+    float  p4_p
+    int    p5_i
+    float  p5_p
+    float  invalid_p
+    float  w1_len
+    int    w1_bars
+    float  w3_len
+    float  w5_len
+    int    pattern_type // 1: Impulse, 2: Diagonal, 3: Zigzag, 4: Flat
+    string wave_str
+    float  w3_proj
+    float  w4_proj
+    float  w5_proj
+    float  wa_proj
+    float  wb_proj
+    float  wc_proj
+
+type WaveDrawings
+    line[]  lns
+    label[] lbls
+    box[]   bxs
+    int     pattern_type
+    int     start_i
+    int     end_i
+
+// =============================================================================
+// STATE ARRAYS & GLOBAL TRACKING
+// =============================================================================
+var array<Pivot>        pivotHighs   = array.new<Pivot>()
+var array<Pivot>        pivotLows    = array.new<Pivot>()
+var array<WaveDrawings> pat_history  = array.new<WaveDrawings>()
+
+var string dash_pattern_name = "Chờ Tín Hiệu..."
+var bool   dash_bull         = true
+var float  dash_p0           = na
+var float  dash_p1           = na
+var float  dash_p2           = na
+var float  dash_invalid      = na
+var float  dash_w1_len       = na
+var float  dash_w3_target    = na
+var float  dash_w4_target    = na
+var float  dash_w5_target    = na
+var float  dash_rr           = na
+var int    frozen_idx        = na
+var int    impulse_count     = 0
+var int    diag_count        = 0
+var int    correct_count     = 0
+
+// =============================================================================
+// HELPER FUNCTIONS & MATHEMATICAL FORMULAS
+// =============================================================================
+float atr_val = ta.atr(14)
+float vol_sma = ta.sma(volume, 20)
+
+f_inRange(float ratio, float lo, float hi, float tol) =>
+    ratio >= lo * (1.0 - tol) and ratio <= hi * (1.0 + tol)
+
+f_isValidSize(float h) =>
+    h > atr_val * min_size_atr
+
+f_pivotHigh(series float src, simple int llen, simple int rlen) =>
+    float candidate = src[rlen]
+    bool  isValid   = true
+    for i = 1 to llen + rlen
+        if i != rlen and src[i] >= candidate
+            isValid := false
+    isValid ? candidate : na
+
+f_pivotLow(series float src, simple int llen, simple int rlen) =>
+    float candidate = src[rlen]
+    bool  isValid   = true
+    for i = 1 to llen + rlen
+        if i != rlen and src[i] <= candidate
+            isValid := false
+    isValid ? candidate : na
+
+f_cleanDrawings(WaveDrawings d) =>
+    if array.size(d.lns) > 0
+        for i = 0 to array.size(d.lns) - 1
+            line.delete(array.get(d.lns, i))
+    if array.size(d.lbls) > 0
+        for i = 0 to array.size(d.lbls) - 1
+            label.delete(array.get(d.lbls, i))
+    if array.size(d.bxs) > 0
+        for i = 0 to array.size(d.bxs) - 1
+            box.delete(array.get(d.bxs, i))
+
+f_manageDrawingsHistory(int max_keep) =>
+    while array.size(pat_history) > max_keep
+        WaveDrawings old = array.shift(pat_history)
+        f_cleanDrawings(old)
+
+// =============================================================================
+// WAVE DETECTION ENGINE (IMPULSE, DIAGONAL & ACTIVE PROJECTION)
+// =============================================================================
+f_detectActiveSetup(array<Pivot> highs, array<Pivot> lows) =>
+    WavePattern wp = WavePattern.new(false, "", true, na, na, na, na, na, na, na, na, na, na, na, na, na, na, na, na, na, 0, "", na, na, na, na, na, na)
+    
+    // 1. Kiểm tra Sóng Tăng Đang Hình Thành (Bullish Setup 0 -> 1 -> 2)
+    if highs.size() >= 1 and lows.size() >= 2
+        Pivot p0 = lows.get(1)
+        Pivot p1 = highs.get(0)
+        Pivot p2 = lows.get(0)
+        
+        bool isSeq = p0.i < p1.i and p1.i < p2.i
+        bool isUp  = p1.p > p0.p and p2.p > p0.p
+        float h1   = p1.p - p0.p
+        float ret2 = h1 > 0 ? (p1.p - p2.p) / h1 : 0.0
+        
+        // Sóng 2 hồi 38.2% - 78.6% chiều dài Sóng 1 (chuẩn Fsen)
+        bool ret2_ok = ret2 >= 0.30 and ret2 <= 0.85
+        bool size_ok = f_isValidSize(h1)
+        
+        if isSeq and isUp and ret2_ok and size_ok
+            float w3_proj = p2.p + h1 * w3_fibo_mult
+            float w4_proj = w3_proj - (w3_proj - p2.p) * w4_fibo_ret
+            float w5_proj = w4_proj + h1 * w5_fibo_mult
+            float wa_proj = w5_proj - (w5_proj - p0.p) * 0.382
+            float wb_proj = wa_proj + (w5_proj - wa_proj) * 0.500
+            float wc_proj = wb_proj - (w5_proj - wa_proj) * 1.000
+            
+            wp := WavePattern.new(true, "Kịch Bản Sóng Tăng (Bullish Wave Setup)", true, p0.i, p0.p, p1.i, p1.p, p2.i, p2.p, na, na, na, na, na, na, p0.p, h1, p1.i - p0.i, na, na, 1, "Impulse [5-3-5-3-5]", w3_proj, w4_proj, w5_proj, wa_proj, wb_proj, wc_proj)
+
+    // 2. Kiểm tra Sóng Giảm Đang Hình Thành (Bearish Setup 0 -> 1 -> 2)
+    if not wp.detected and highs.size() >= 2 and lows.size() >= 1
+        Pivot p0 = highs.get(1)
+        Pivot p1 = lows.get(0)
+        Pivot p2 = highs.get(0)
+        
+        bool isSeq = p0.i < p1.i and p1.i < p2.i
+        bool isDn  = p1.p < p0.p and p2.p < p0.p
+        float h1   = p0.p - p1.p
+        float ret2 = h1 > 0 ? (p2.p - p1.p) / h1 : 0.0
+        
+        bool ret2_ok = ret2 >= 0.30 and ret2 <= 0.85
+        bool size_ok = f_isValidSize(h1)
+        
+        if isSeq and isDn and ret2_ok and size_ok
+            float w3_proj = p2.p - h1 * w3_fibo_mult
+            float w4_proj = w3_proj + (p2.p - w3_proj) * w4_fibo_ret
+            float w5_proj = w4_proj - h1 * w5_fibo_mult
+            float wa_proj = w5_proj + (p0.p - w5_proj) * 0.382
+            float wb_proj = wa_proj - (wa_proj - w5_proj) * 0.500
+            float wc_proj = wb_proj + (wa_proj - w5_proj) * 1.000
+            
+            wp := WavePattern.new(true, "Kịch Bản Sóng Giảm (Bearish Zigzag Setup)", false, p0.i, p0.p, p1.i, p1.p, p2.i, p2.p, na, na, na, na, na, na, p0.p, h1, p1.i - p0.i, na, na, 3, "Zigzag [5-3-5]", w3_proj, w4_proj, w5_proj, wa_proj, wb_proj, wc_proj)
+            
+    wp
+
+// =============================================================================
+// MAIN EXECUTION ON EACH BAR
+// =============================================================================
+float ph = f_pivotHigh(high, piv_left, piv_right)
+float pl = f_pivotLow(low,   piv_left, piv_right)
+
+if not na(ph)
+    pivotHighs.unshift(Pivot.new(ph, bar_index - piv_right))
+    if pivotHighs.size() > max_piv
+        pivotHighs.pop()
+
+if not na(pl)
+    pivotLows.unshift(Pivot.new(pl, bar_index - piv_right))
+    if pivotLows.size() > max_piv
+        pivotLows.pop()
+
+WavePattern current_setup = f_detectActiveSetup(pivotHighs, pivotLows)
+
+bool is_new_event = current_setup.detected and barstate.isconfirmed and (na(frozen_idx) or math.abs(current_setup.p0_i - frozen_idx) > cooldown)
+
+if is_new_event
+    frozen_idx := current_setup.p0_i
+    WaveDrawings cur = WaveDrawings.new(array.new_line(), array.new_label(), array.new_box(), current_setup.pattern_type, current_setup.p0_i, current_setup.p2_i)
+    
+    // Cập nhật State cho HUD Dashboard
+    dash_pattern_name := current_setup.name
+    dash_bull         := current_setup.isBullish
+    dash_p0           := current_setup.p0_p
+    dash_p1           := current_setup.p1_p
+    dash_p2           := current_setup.p2_p
+    dash_invalid      := current_setup.invalid_p
+    dash_w1_len       := current_setup.w1_len
+    dash_w3_target    := current_setup.w3_proj
+    dash_w4_target    := current_setup.w4_proj
+    dash_w5_target    := current_setup.w5_proj
+    
+    float risk = math.abs(current_setup.p2_p - current_setup.invalid_p)
+    float reward = math.abs(current_setup.w3_proj - current_setup.p2_p)
+    dash_rr := risk > 0 ? reward / risk : 0.0
+
+    color main_col = current_setup.isBullish ? col_impulse : col_imp_bear
+
+    // 1. VẼ CÁC SÓNG ĐÃ HÌNH THÀNH (0 -> 1 -> 2~)
+    line l01 = line.new(current_setup.p0_i, current_setup.p0_p, current_setup.p1_i, current_setup.p1_p, color=main_col, width=3)
+    line l12 = line.new(current_setup.p1_i, current_setup.p1_p, current_setup.p2_i, current_setup.p2_p, color=color.new(main_col, 30), width=2)
+    array.push(cur.lns, l01)
+    array.push(cur.lns, l12)
+
+    // Nhãn sóng 0, 1, 2~
+    label lb0 = label.new(current_setup.p0_i, current_setup.p0_p, "0", color=color.rgb(255, 60, 80), textcolor=color.white, style=current_setup.isBullish ? label.style_label_up : label.style_label_down, size=size.small)
+    label lb1 = label.new(current_setup.p1_i, current_setup.p1_p, "1", color=current_setup.isBullish ? color.rgb(0, 200, 255) : color.rgb(255, 80, 80), textcolor=color.white, style=current_setup.isBullish ? label.style_label_down : label.style_label_up, size=size.small)
+    label lb2 = label.new(current_setup.p2_i, current_setup.p2_p, "2~", color=color.rgb(255, 180, 0), textcolor=color.white, style=current_setup.isBullish ? label.style_label_up : label.style_label_down, size=size.small)
+    array.push(cur.lbls, lb0)
+    array.push(cur.lbls, lb1)
+    array.push(cur.lbls, lb2)
+
+    // Nhãn CHoCH tại điểm bứt phá Sóng 1
+    if show_choch
+        label lb_choch = label.new(current_setup.p1_i, current_setup.p1_p, "CHoCH", color=color.rgb(0, 0, 0, 0), textcolor=color.rgb(255, 120, 140), style=current_setup.isBullish ? label.style_label_down : label.style_label_up, size=size.small)
+        array.push(cur.lbls, lb_choch)
+
+    // 2. ĐƯỜNG VÔ HIỆU HÓA KỊCH BẢN (INVALIDATION LINE)
+    if show_invalid
+        int inv_end_x = bar_index + proj_bars_w3 + proj_bars_w4 + proj_bars_w5 + 10
+        line l_inv = line.new(current_setup.p0_i, current_setup.invalid_p, inv_end_x, current_setup.invalid_p, color=col_invalid, style=line.style_dashed, width=2)
+        label lb_inv = label.new(inv_end_x, current_setup.invalid_p, "INVALID: " + str.tostring(current_setup.invalid_p, format.mintick), color=color.rgb(0, 0, 0, 0), textcolor=col_invalid, style=label.style_label_left, size=size.small)
+        array.push(cur.lns, l_inv)
+        array.push(cur.lbls, lb_inv)
+
+    // 3. DỰ BÁO CÁC SÓNG TƯƠNG LAI (3?, 4?, 5?, A?, B?, C?)
+    if show_projections
+        int x_w3 = bar_index + proj_bars_w3
+        int x_w4 = x_w3 + proj_bars_w4
+        int x_w5 = x_w4 + proj_bars_w5
+        int x_wa = x_w5 + 4
+        int x_wb = x_wa + 4
+        int x_wc = x_wb + 6
+
+        // Đường nét đứt màu xám kết nối kịch bản tương lai
+        line lp_23 = line.new(current_setup.p2_i, current_setup.p2_p, x_w3, current_setup.w3_proj, color=col_proj_line, style=line.style_dashed, width=2)
+        line lp_34 = line.new(x_w3, current_setup.w3_proj, x_w4, current_setup.w4_proj, color=col_proj_line, style=line.style_dashed, width=2)
+        line lp_45 = line.new(x_w4, current_setup.w4_proj, x_w5, current_setup.w5_proj, color=col_proj_line, style=line.style_dashed, width=2)
+        line lp_5a = line.new(x_w5, current_setup.w5_proj, x_wa, current_setup.wa_proj, color=color.new(col_proj_line, 30), style=line.style_dotted, width=1)
+        line lp_ab = line.new(x_wa, current_setup.wa_proj, x_wb, current_setup.wb_proj, color=color.new(col_proj_line, 30), style=line.style_dotted, width=1)
+        line lp_bc = line.new(x_wb, current_setup.wb_proj, x_wc, current_setup.wc_proj, color=color.new(col_proj_line, 30), style=line.style_dotted, width=1)
+        array.push(cur.lns, lp_23)
+        array.push(cur.lns, lp_34)
+        array.push(cur.lns, lp_45)
+        array.push(cur.lns, lp_5a)
+        array.push(cur.lns, lp_ab)
+        array.push(cur.lns, lp_bc)
+
+        // Nhãn sóng tương lai có dấu ?
+        label lb_w3 = label.new(x_w3, current_setup.w3_proj, "3?", color=color.rgb(70, 75, 90), textcolor=color.white, style=current_setup.isBullish ? label.style_label_down : label.style_label_up, size=size.small)
+        label lb_w4 = label.new(x_w4, current_setup.w4_proj, "4?", color=color.rgb(70, 75, 90), textcolor=color.white, style=current_setup.isBullish ? label.style_label_up : label.style_label_down, size=size.small)
+        label lb_w5 = label.new(x_w5, current_setup.w5_proj, "5?", color=color.rgb(70, 75, 90), textcolor=color.white, style=current_setup.isBullish ? label.style_label_down : label.style_label_up, size=size.small)
+        label lb_wa = label.new(x_wa, current_setup.wa_proj, "A?", color=color.rgb(90, 80, 70), textcolor=color.white, style=current_setup.isBullish ? label.style_label_up : label.style_label_down, size=size.small)
+        label lb_wb = label.new(x_wb, current_setup.wb_proj, "B?", color=color.rgb(90, 80, 70), textcolor=color.white, style=current_setup.isBullish ? label.style_label_down : label.style_label_up, size=size.small)
+        label lb_wc = label.new(x_wc, current_setup.wc_proj, "C?", color=color.rgb(90, 80, 70), textcolor=color.white, style=current_setup.isBullish ? label.style_label_up : label.style_label_down, size=size.small)
+        array.push(cur.lbls, lb_w3)
+        array.push(cur.lbls, lb_w4)
+        array.push(cur.lbls, lb_w5)
+        array.push(cur.lbls, lb_wa)
+        array.push(cur.lbls, lb_wb)
+        array.push(cur.lbls, lb_wc)
+
+        // 4. VÙNG HỘP MÀU VÀNG MỤC TIÊU (YELLOW TARGET ZONES)
+        if show_target_zones
+            float z_h = current_setup.w1_len * 0.15
+            box b_w3 = box.new(x_w3 - 3, current_setup.w3_proj + z_h, x_w3 + 5, current_setup.w3_proj - z_h, bgcolor=color.new(col_zone_box, 82), border_color=color.new(col_zone_box, 30), border_width=1)
+            box b_w5 = box.new(x_w5 - 3, current_setup.w5_proj + z_h, x_w5 + 5, current_setup.w5_proj - z_h, bgcolor=color.new(col_zone_box, 82), border_color=color.new(col_zone_box, 30), border_width=1)
+            array.push(cur.bxs, b_w3)
+            array.push(cur.bxs, b_w5)
+
+    array.push(pat_history, cur)
+    f_manageDrawingsHistory(max_patterns)
+
+// =============================================================================
+// HUD DASHBOARD TABLE (CHUYÊN NGHIỆP GÓC TRÊN BÊN PHẢI)
+// =============================================================================
+if show_hud
+    var table hud = table.new(position.top_right, 2, 14,
+        border_width=1, border_color=color.rgb(60, 70, 95, 30),
+        frame_width=1,  frame_color=color.rgb(70, 85, 120, 20))
+        
+    color h_bg = color.rgb(25, 30, 48)
+    color r_bg1 = color.rgb(18, 22, 35)
+    color r_bg2 = color.rgb(14, 18, 28)
+    
+    table.cell(hud, 0, 0, "  HỆ THỐNG FSEN ELLIOTT", bgcolor=h_bg, text_color=color.rgb(0, 200, 255), text_halign=text.align_left, text_size=size.small)
+    table.cell(hud, 1, 0, syminfo.ticker + " · " + timeframe.period, bgcolor=h_bg, text_color=color.rgb(220, 230, 250), text_halign=text.align_right, text_size=size.small)
+    
+    table.cell(hud, 0, 1, "  Chiến Lược (Direction)", bgcolor=r_bg1, text_color=dash_txt_color, text_halign=text.align_left, text_size=size.small)
+    table.cell(hud, 1, 1, dash_bull ? "▲ LONG (Mua)" : "▼ SHORT (Bán)", bgcolor=r_bg1, text_color=dash_bull ? color.rgb(0, 255, 150) : color.rgb(255, 60, 80), text_halign=text.align_right, text_size=size.small)
+    
+    table.cell(hud, 0, 2, "  Điểm Vô Hiệu (Invalidation)", bgcolor=r_bg2, text_color=dash_txt_color, text_halign=text.align_left, text_size=size.small)
+    table.cell(hud, 1, 2, not na(dash_invalid) ? str.tostring(dash_invalid, format.mintick) : "—", bgcolor=r_bg2, text_color=color.rgb(255, 70, 90), text_halign=text.align_right, text_size=size.small)
+
+    table.cell(hud, 0, 3, "  Mô Hình Dự Kiến", bgcolor=r_bg1, text_color=dash_txt_color, text_halign=text.align_left, text_size=size.small)
+    table.cell(hud, 1, 3, dash_bull ? "Sóng Đẩy [5-3-5-3-5]" : "Zigzag [5-3-5]", bgcolor=r_bg1, text_color=color.rgb(255, 190, 40), text_halign=text.align_right, text_size=size.small)
+
+    table.cell(hud, 0, 4, "  Biên Độ Sóng 1 (H1)", bgcolor=r_bg2, text_color=dash_txt_color, text_halign=text.align_left, text_size=size.small)
+    table.cell(hud, 1, 4, not na(dash_w1_len) ? str.tostring(dash_w1_len, format.mintick) : "—", bgcolor=r_bg2, text_color=color.rgb(100, 210, 255), text_halign=text.align_right, text_size=size.small)
+
+    table.cell(hud, 0, 5, "  Mục Tiêu Sóng 3? (1.618×)", bgcolor=r_bg1, text_color=dash_txt_color, text_halign=text.align_left, text_size=size.small)
+    table.cell(hud, 1, 5, not na(dash_w3_target) ? str.tostring(dash_w3_target, format.mintick) : "—", bgcolor=r_bg1, text_color=color.rgb(0, 255, 160), text_halign=text.align_right, text_size=size.small)
+
+    table.cell(hud, 0, 6, "  Vùng Tích Lũy Sóng 4?", bgcolor=r_bg2, text_color=dash_txt_color, text_halign=text.align_left, text_size=size.small)
+    table.cell(hud, 1, 6, not na(dash_w4_target) ? str.tostring(dash_w4_target, format.mintick) : "—", bgcolor=r_bg2, text_color=color.rgb(255, 210, 60), text_halign=text.align_right, text_size=size.small)
+
+    table.cell(hud, 0, 7, "  Mục Tiêu Sóng 5? (1.0× H1)", bgcolor=r_bg1, text_color=dash_txt_color, text_halign=text.align_left, text_size=size.small)
+    table.cell(hud, 1, 7, not na(dash_w5_target) ? str.tostring(dash_w5_target, format.mintick) : "—", bgcolor=r_bg1, text_color=color.rgb(180, 120, 255), text_halign=text.align_right, text_size=size.small)
+
+    table.cell(hud, 0, 8, "  Tỷ Lệ Lợi Nhuận / Rủi Ro (R:R)", bgcolor=r_bg2, text_color=dash_txt_color, text_halign=text.align_left, text_size=size.small)
+    table.cell(hud, 1, 8, not na(dash_rr) ? "1 : " + str.tostring(dash_rr, "#.##") : "—", bgcolor=r_bg2, text_color=color.rgb(0, 255, 200), text_halign=text.align_right, text_size=size.small)
+    
+    table.cell(hud, 0, 9, "  Chu Kỳ Thời Gian Dự Kiến", bgcolor=r_bg1, text_color=dash_txt_color, text_halign=text.align_left, text_size=size.small)
+    table.cell(hud, 1, 9, str.tostring(proj_bars_w3 + proj_bars_w4 + proj_bars_w5) + " Nến (" + timeframe.period + ")", bgcolor=r_bg1, text_color=color.rgb(140, 180, 255), text_halign=text.align_right, text_size=size.small)
+
+    table.cell(hud, 0, 10, "  Chuẩn Kỹ Thuật", bgcolor=h_bg, text_color=color.rgb(100, 110, 130), text_halign=text.align_left, text_size=size.small)
+    table.cell(hud, 1, 10, "Fsen & Pine Script v6", bgcolor=h_bg, text_color=color.rgb(100, 110, 130), text_halign=text.align_right, text_size=size.small)
+
+// =============================================================================
+// HỘP CHÚ THÍCH DỰ BÁO SÓNG FSEN GÓC TRÁI (TOP-LEFT PROJECTION ANNOTATION BOX)
+// Hiển thị trực quan 3 thành tố: Dạng Sóng Dự Kiến - Biên Độ Dự Kiến - Thời Gian
+// =============================================================================
+if show_proj_box
+    var table proj_box = table.new(position.top_left, 1, 4,
+        bgcolor=color.rgb(10, 16, 28, 15),
+        border_width=2, border_color=color.rgb(0, 180, 255),
+        frame_width=2,  frame_color=color.rgb(0, 200, 255))
+        
+    string pat_text = dash_bull ? "Sóng tuần dự kiến là Sóng Đẩy [5-3-5-3-5]" : "Sóng tuần dự kiến là Zigzag [5-3-5]"
+    string amp_text = "Biên độ dự kiến: W3 [" + (not na(dash_w3_target) ? str.tostring(dash_w3_target, format.mintick) : "—") + "] | W5 [" + (not na(dash_w5_target) ? str.tostring(dash_w5_target, format.mintick) : "—") + "]"
+    string time_text = "Thời gian: W3 (" + str.tostring(proj_bars_w3) + " nến) -> W5 (" + str.tostring(proj_bars_w3 + proj_bars_w4 + proj_bars_w5) + " nến)"
+    string inv_text = "Mức vô hiệu (INVALID): " + (not na(dash_invalid) ? str.tostring(dash_invalid, format.mintick) : "—")
+    
+    table.cell(proj_box, 0, 0, "🔷 " + pat_text, bgcolor=color.rgb(16, 26, 46), text_color=color.rgb(0, 230, 255), text_halign=text.align_left, text_size=size.normal)
+    table.cell(proj_box, 0, 1, "🎯 " + amp_text, bgcolor=color.rgb(12, 20, 36), text_color=color.rgb(255, 210, 60), text_halign=text.align_left, text_size=size.small)
+    table.cell(proj_box, 0, 2, "⏳ " + time_text, bgcolor=color.rgb(12, 20, 36), text_color=color.rgb(140, 200, 255), text_halign=text.align_left, text_size=size.small)
+    table.cell(proj_box, 0, 3, "🛑 " + inv_text, bgcolor=color.rgb(10, 16, 28), text_color=color.rgb(255, 80, 100), text_halign=text.align_left, text_size=size.small)
+
+

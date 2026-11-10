@@ -1,0 +1,89 @@
+{
+  "symbol": "VND",
+  "evaluated_at": "2026-11-08T21:37:32.463315",
+  "final_recommendation": "QUAN SÁT / KHÔNG MUA (Chưa đạt biên an toàn mục tiêu 25%)",
+  "asset_valuation": {
+    "method": "Định Giá Tài Sản Ròng (Bóc Tách Nợ Chiếm Dụng)",
+    "inputs": {
+      "total_assets_bil": 51628.0,
+      "total_liabilities_bil": 30726.0,
+      "unearned_advances_bil": 1850.0,
+      "shares_outstanding_mil": 1522.3,
+      "current_price_k": 14.95
+    },
+    "recalculated_debt_bil": 28876.0,
+    "enterprise_value_bil": 22752.0,
+    "intrinsic_value_per_share": 14.95,
+    "margin_of_safety_pct": -0.03,
+    "recommendation": "KHÔNG MUA (Chưa đủ biên an toàn > 25%)",
+    "is_buy": false
+  },
+  "dcf_valuation": {
+    "method": "DCF (Chiết Khấu Dòng Tiền 10 Năm)",
+    "inputs": {
+      "lnst_5y": [
+        2130.0,
+        1368.0,
+        2018.0,
+        1718.0,
+        2022.0
+      ],
+      "shares_outstanding_mil": 1522.3,
+      "current_price_k": 14.95,
+      "discount_rate": 0.1,
+      "inflation_rate": 0.07
+    },
+    "growth_rates": {
+      "g1": -0.3577,
+      "g2": 0.4751,
+      "g3": -0.1487,
+      "g4": 0.1769,
+      "g_proposed": 0.0364,
+      "g_estimated": 0.0182
+    },
+    "projections": {
+      "nominal_10y": [
+        2058.82,
+        2096.32,
+        2134.49,
+        2173.36,
+        2212.94,
+        2212.94,
+        2212.94,
+        2212.94,
+        2212.94,
+        2212.94
+      ],
+      "real_10y": [
+        1924.13,
+        1831.0,
+        1742.38,
+        1658.05,
+        1577.8,
+        1474.58,
+        1378.11,
+        1287.95,
+        1203.69,
+        1124.95
+      ],
+      "pv_10y": [
+        1749.21,
+        1513.23,
+        1309.08,
+        1132.47,
+        979.69,
+        832.36,
+        707.19,
+        600.84,
+        510.48,
+        433.72
+      ]
+    },
+    "enterprise_value_bil": 9768.26,
+    "intrinsic_value_per_share": 6.42,
+    "current_price": 14.95,
+    "margin_of_safety_pct": -57.08,
+    "recommendation": "KHÔNG MUA (Chưa đủ biên an toàn > 25%)",
+    "is_buy": false
+  }
+}

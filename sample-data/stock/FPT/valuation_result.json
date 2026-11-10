@@ -1,0 +1,89 @@
+{
+  "symbol": "FPT",
+  "evaluated_at": "2026-11-10T11:12:29.209287",
+  "final_recommendation": "QUAN SÁT / KHÔNG MUA (Chưa đạt biên an toàn mục tiêu 25%)",
+  "asset_valuation": {
+    "method": "Định Giá Tài Sản Ròng (Bóc Tách Nợ Chiếm Dụng)",
+    "inputs": {
+      "total_assets_bil": 75329.49,
+      "total_liabilities_bil": 44393.76,
+      "unearned_advances_bil": 8500.0,
+      "shares_outstanding_mil": 1885.73,
+      "current_price_k": 51.9
+    },
+    "recalculated_debt_bil": 35893.76,
+    "enterprise_value_bil": 39435.73,
+    "intrinsic_value_per_share": 20.91,
+    "margin_of_safety_pct": -59.71,
+    "recommendation": "KHÔNG MUA (Chưa đủ biên an toàn > 25%)",
+    "is_buy": false
+  },
+  "dcf_valuation": {
+    "method": "DCF (Chiết Khấu Dòng Tiền 10 Năm)",
+    "inputs": {
+      "lnst_5y": [
+        4424.0,
+        5310.0,
+        6465.0,
+        7788.0,
+        9224.0
+      ],
+      "shares_outstanding_mil": 1885.727648,
+      "current_price_k": 51.9,
+      "discount_rate": 0.1,
+      "inflation_rate": 0.07
+    },
+    "growth_rates": {
+      "g1": 0.2003,
+      "g2": 0.2175,
+      "g3": 0.2046,
+      "g4": 0.1844,
+      "g_proposed": 0.2017,
+      "g_estimated": 0.1009
+    },
+    "projections": {
+      "nominal_10y": [
+        10154.25,
+        11178.33,
+        12305.68,
+        13546.72,
+        14912.93,
+        14912.93,
+        14912.93,
+        14912.93,
+        14912.93,
+        14912.93
+      ],
+      "real_10y": [
+        9489.96,
+        9763.58,
+        10045.1,
+        10334.73,
+        10632.71,
+        9937.11,
+        9287.02,
+        8679.46,
+        8111.65,
+        7580.98
+      ],
+      "pv_10y": [
+        8627.23,
+        8069.08,
+        7547.03,
+        7058.76,
+        6602.08,
+        5609.24,
+        4765.71,
+        4049.03,
+        3440.13,
+        2922.79
+      ]
+    },
+    "enterprise_value_bil": 58691.09,
+    "intrinsic_value_per_share": 31.12,
+    "current_price": 51.9,
+    "margin_of_safety_pct": -40.03,
+    "recommendation": "KHÔNG MUA (Chưa đủ biên an toàn > 25%)",
+    "is_buy": false
+  }
+}
