@@ -55,7 +55,7 @@ graph TD
 ### 1. Installation
 Clone this repository and install the dependencies:
 ```bash
-git clone https://github.com/your-username/agy-investment-agent.git
+git clone https://github.com/hoang050205-dot/agy-investment-agent.git
 cd agy-investment-agent
 pip install -r requirements.txt
 ```
@@ -77,8 +77,17 @@ Run the full 3-phase automated investment pipeline:
 
 ---
 
-## 🤖 Using with OpenAI Codex / ChatGPT
-Refer to [`CODEX_CHATGPT_INSTRUCTIONS.md`](CODEX_CHATGPT_INSTRUCTIONS.md) for the complete Master System Prompt, Custom GPTs configuration, and prompt templates.
+## 🤖 Hướng Dẫn Vận Hành Cho OpenAI Codex / ChatGPT / Copilot
+
+Repository này được cấu hình sẵn để **OpenAI Codex, ChatGPT (Custom GPTs), GitHub Copilot và Cursor IDE** tự động nhận diện và vận hành như một AI Quant Senior:
+
+1. **Cẩm Nang Bàn Giao & Hướng Dẫn Sử Dụng Chi Tiết:**
+   - 📖 Xem tài liệu: [`CAM_NANG_BAN_GIAO_VA_VAN_HANH.md`](CAM_NANG_BAN_GIAO_VA_VAN_HANH.md)
+   - 📖 Hướng dẫn cấu hình ChatGPT Custom GPTs: [`CODEX_CHATGPT_INSTRUCTIONS.md`](CODEX_CHATGPT_INSTRUCTIONS.md)
+   - 📄 File System Prompt nguyên bản: [`CODEX_SYSTEM_PROMPT.txt`](CODEX_SYSTEM_PROMPT.txt)
+2. **Tự Động Hóa Với GitHub Copilot / Cursor / VS Code:**
+   - Hệ thống tự động nạp cấu hình chỉ dẫn từ: [`.github/copilot-instructions.md`](.github/copilot-instructions.md)
+   - Khi mở repository này trong VS Code, Cursor hoặc GitHub Codespaces, Codex sẽ tự động tuân thủ 100% quy tắc phân tích Fsen 4 lớp và 3 thiết luật sóng Elliott.
 
 ---
 
